@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:flutter/material.dart';
 import 'package:truth_or_dare/services/database_service.dart';
@@ -12,6 +12,92 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final DatabaseService _databaseService = DatabaseService.instance;
+
+  void _showAddQuestionModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Question",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8), // Space between question and dropdown
+                  Expanded(
+                    flex: 1,
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        items: [
+                          DropdownMenuItem(
+                            value: "Truth",
+                            child: Text("Truth"),
+                          ),
+                          DropdownMenuItem(
+                            value: "Dare",
+                            child: Text("Dare"),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          // Handle dropdown value change
+                        },
+                        hint: Text("Type"),
+                      ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12),
+              Transform.translate(
+                offset: Offset(MediaQuery.of(context).size.width*0.31,0),
+                child : SizedBox(
+                  width: 130,
+                  height: 50,
+                  child : ElevatedButton(
+                    onPressed: () {
+                      // Save action
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      "Save",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +169,8 @@ class _HomeState extends State<Home> {
             Positioned(
                 height: 35,
                 width: 140,
-                bottom: 350,
-                right: 25,
+                bottom:MediaQuery.of(context).size.height*0.33,
+                right: MediaQuery.of(context).size.width*0.04,
                 child: FloatingActionButton(
                   onPressed: () {
 
@@ -127,7 +213,7 @@ class _HomeState extends State<Home> {
                   child: Stack(
                     children: [
                       Transform.translate(
-                        offset: Offset(130, 70), // Custom x and y offsets
+                        offset: Offset(135, 70), // Custom x and y offsets
                         child: Text(
                           "TRUTH",
                           style: TextStyle(
@@ -164,7 +250,7 @@ class _HomeState extends State<Home> {
               right: 40, // Distance from the right edge
               child: FloatingActionButton(
                 onPressed: () {
-                  // Add new card action
+                  _showAddQuestionModal(context);
                 },
                 backgroundColor: Color(0xFFEEEEEE),
                 child: Icon(
